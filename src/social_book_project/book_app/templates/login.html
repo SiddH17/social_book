@@ -57,10 +57,15 @@
 						<div class="login-title">
 							<h2 class="text-center text-primary">Login To DeskApp</h2>
 						</div>
+						<div>
+							{% for message in messages %}
+							<h4>{{ message }}</h4>
+							{% endfor %}
+						</div>
 						<form action="" Method="POST">
 							{% csrf_token %}
 							<div class="input-group custom">
-								<input type="text" class="form-control form-control-lg" name="emailid" placeholder="Email">
+								<input type="text" class="form-control form-control-lg" name="email" placeholder="Email">
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
 								</div>

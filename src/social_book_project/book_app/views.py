@@ -31,7 +31,7 @@ def registeruser(request):
                 messages.info(request, "Email already taken!")
                 return redirect('register')
             elif CustomUser.objects.filter(phone=phone).exists():
-                messages.info(request, " Someone else already uses this phone number!")
+                messages.info(request, "Someone else already uses this phone number!")
                 return redirect('register')
             else:
                 user = CustomUser.objects.create_user(email=email, password=password1, Public_visibility=visible, phone=phone, birth_year=birth_year)
@@ -44,13 +44,17 @@ def registeruser(request):
 
 def loginuser(request):
     if request.method == 'POST':
-        email = request.POST['emailid']
-        password = request.POST['password']
+        email = request.POST.get('email')
+        password = request.POST.get('password')
 
-        user = authenticate(emailid=email, password=password)
+        user = authenticate(email=email, password=password)
         if user is not None:
+            messages.info(request, "Thank you!")
             login(request, user)
-            return redirect('/home')
+            return redirect('login')
+        else:
+            messages.info(request, "Please enter valid credentials!")
+            return redirect('login')
     return render(request, 'login.html')
 
 def logoutuser(request):
