@@ -49,9 +49,8 @@ def loginuser(request):
 
         user = authenticate(email=email, password=password)
         if user is not None:
-            messages.info(request, "Thank you!")
             login(request, user)
-            return redirect('login')
+            return redirect('home')
         else:
             messages.info(request, "Please enter valid credentials!")
             return redirect('login')
