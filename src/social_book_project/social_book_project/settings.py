@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'social_book_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'testdb',
         'USER': 'postgres',
         'PASSWORD': '1234',

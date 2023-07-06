@@ -1,10 +1,11 @@
 # Create your views here.
 # views.py
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
-from django.contrib.auth.models import User
+from .models import CustomUser
 
 # Create your views here.
 
@@ -12,41 +13,45 @@ def home(request):
     return render(request, 'home.html')
 
 def registeruser(request):
-    form = UserCreationForm()
-
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.username = user.username.lower()
-            user.save()
-            login(request, user)
-            return redirect('home')
+        visible = False
+        email = request.POST.get('email')
+        Public_visibility = request.POST.get('Public_visibility')
+        if Public_visibility == 'on':
+            visible = True
         else:
-            return HttpResponse('Error Occured')
+            visible = False
+        phone = request.POST.get('phone')
+        birth_year = request.POST.get('birth_year')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
 
-    context = {'form': form}
-    return render(request, 'register.html', context)
+        if password1==password2:
+            if CustomUser.objects.filter(email=email).exists():
+                messages.info(request, "Email already taken!")
+                return redirect('register')
+            elif CustomUser.objects.filter(phone=phone).exists():
+                messages.info(request, " Someone else already uses this phone number!")
+                return redirect('register')
+            else:
+                user = CustomUser.objects.create_user(email=email, password=password1, Public_visibility=visible, phone=phone, birth_year=birth_year)
+                user.save()
+                return redirect('login')
+        else:
+            print("Passwords don't match")
+            return redirect('register')
+    return render(request, 'register.html')
 
 def loginuser(request):
-
-    page = 'login'
-
-    if request.user.is_authenticated:
-        return redirect('home')
     if request.method == 'POST':
-        name = request.POST.get('username').lower()
-        password = request.POST.get('password')     
-        user = authenticate(request, username=name, password=password)
+        email = request.POST['emailid']
+        password = request.POST['password']
 
+        user = authenticate(emailid=email, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
-        else:
-            return HttpResponse('Invalid username or password')
-
-    context = {'book_app': page}
-    return render(request, 'login.html', context)
+            return redirect('/home')
+    return render(request, 'login.html')
 
 def logoutuser(request):
     logout(request)
