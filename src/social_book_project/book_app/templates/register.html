@@ -77,10 +77,10 @@
 										</div>
 										{% comment %} Public Visibility is asked {% endcomment %}
 										<div class="form-group row">
+											<label class="col-sm-4 col-form-label">Public Visibility*</label>
 											<div>
 												<input type="checkbox" name="Public_visibility">
 											</div>
-											<label class="col-sm-4 col-form-label">Public Visibility*</label>
 										</div>
 										{% comment %} Phone number is asked {% endcomment %}
 										<div class="form-group row">
@@ -112,7 +112,6 @@
 									</div>
 								</section>
 								<button type="submit">Submit</button>
-								<button type="button" id="success-modal-btn" hidden data-toggle="modal" data-target="#success-modal" data-backdrop="static">Launch modal</button>
 							</form>
 						</div>
 					</div>
@@ -120,29 +119,13 @@
 			</div>
 		</div>
 	</div>
-	<!-- success Popup html Start -->
-	<div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered max-width-400" role="document">
-			<div class="modal-content">
-				<div class="modal-body text-center font-18">
-					<h3 class="mb-20">Form Submitted!</h3>
-					<div class="mb-30 text-center"><img src="{% static 'images/success.png'%}"></div>
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-				</div>
-				<div class="modal-footer justify-content-center">
-					<a href="{% url 'login'%}" class="btn btn-primary">Done</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- success Popup html End -->
 	<!-- js -->
-	<script src="{% static 'scripts/core.js'%}"></script>
+	{% comment %} <script src="{% static 'scripts/core.js'%}"></script>
 	<script src="{% static 'scripts/script.min.js'%}"></script>
 	<script src="{% static 'scripts/process.js'%}"></script>
 	<script src="{% static 'scripts/layout-settings.js'%}"></script>
 	<script src="{% static 'scripts/jquery.steps.js'%}"></script>
-	<script src="{% static 'scripts/steps-setting.js'%}"></script>
+	<script src="{% static 'scripts/steps-setting.js'%}"></script> {% endcomment %}
 </body>
 
 </html>

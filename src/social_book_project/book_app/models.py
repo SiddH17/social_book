@@ -6,10 +6,6 @@ from datetime import date
 
 # Create your models here.
 
-class Book(models.Model):
-    email = models.EmailField(_("Email ID"), unique=True)
-    phone = models.PositiveBigIntegerField(_("Phone no."), unique=True)
-
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
@@ -25,3 +21,10 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+    
+class Profiles(CustomUser):
+    name = models.CharField(max_length=100)
+    department = models.CharField()
+    designation = models.CharField()
+
+    

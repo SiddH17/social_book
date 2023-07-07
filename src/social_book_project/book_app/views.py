@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
-from .models import CustomUser
+from .models import CustomUser, Profiles
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -38,24 +39,47 @@ def registeruser(request):
                 user.save()
                 return redirect('login')
         else:
-            print("Passwords don't match")
+            messages.info(request, "Passwords don't match")
             return redirect('register')
     return render(request, 'register.html')
 
 def loginuser(request):
     if request.method == 'POST':
+        user = request.user
         email = request.POST.get('email')
         password = request.POST.get('password')
 
         user = authenticate(email=email, password=password)
         if user is not None:
             login(request, user)
-            return redirect('home')
+            return redirect('profile',pk=user.id)
         else:
             messages.info(request, "Please enter valid credentials!")
             return redirect('login')
     return render(request, 'login.html')
 
 def logoutuser(request):
+
     logout(request)
     return redirect('home')
+
+def userprofile(request,pk):
+    users = request.user
+    text = request.POST.get('text')
+    if request.method == 'POST':
+        name = request.POST.get('name')
+    if 'text' in request.POST:
+        obj1 = Profiles.objects.filter(department = '%s'% text, designation = 'Manager').values()
+        obj2 = Profiles.objects.filter(department = '%s'% users.id, designation = 'Manager').values()
+        obj3 = Profiles.objects.filter(department = '%s'% text, designation = 'Manager').values()
+        obj4 = list(obj3)[0]['value_id']
+        obj5 = CustomUser.objects.filter(id = '%s'% obj4).values('name')
+    
+        data = {
+            'pos1': list(obj1),
+            'pos2': list(obj2),
+            'pos3': obj5[0]['name'],
+        }
+        return JsonResponse(data)
+    
+    return render(request, 'profile.html')

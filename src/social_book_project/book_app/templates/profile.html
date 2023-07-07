@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete User Profile</title>
+</head>
+<body>
+    <h1>Welcome! Please complete your profile below:</h1>
+    <br>
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <!-- Accepting Name from user -->
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name">
+            <br><br>
+
+            <!-- User needs to select department -->
+            <span>Select Department:</span>
+            <select name="department" id="department">
+                <option value="CSE" id="CSE">CS Engineering</option>
+                <option value="Phy" id="Phy">Physics</option>
+                <option value="Chem" id="Chem">Chemistry</option>
+                <option value="Math" id="Math">Mathematics</option>
+            </select>
+            <br><br>
+
+            <!-- User needs to choose designation -->
+            <span>Select Position:</span>
+            <select name="designation" id="designation">
+            </select>
+            <br><br>
+        </form>
+        <!-- Manager assigned if employee -->
+        <div>
+            <p id="yourmanager">Your Manager: </p>
+            <br>    
+        </div>
+        <button type="submit">Submit</button>
+    </div>
+    <script src="{% static 'profile.js'%}"></script>
+</body>
+</html>
