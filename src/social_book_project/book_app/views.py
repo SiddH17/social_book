@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
-from .models import CustomUser, Profiles
+from .models import CustomUser, Userprofiles
 from django.http import JsonResponse
 
 # Create your views here.
@@ -64,22 +64,30 @@ def logoutuser(request):
     return redirect('home')
 
 def userprofile(request,pk):
-    users = request.user
-    text = request.POST.get('text')
+    users = request.user   
     if request.method == 'POST':
-        name = request.POST.get('name')
-    if 'text' in request.POST:
-        obj1 = Profiles.objects.filter(department = '%s'% text, designation = 'Manager').values()
-        obj2 = Profiles.objects.filter(department = '%s'% users.id, designation = 'Manager').values()
-        obj3 = Profiles.objects.filter(department = '%s'% text, designation = 'Manager').values()
-        obj4 = list(obj3)[0]['value_id']
-        obj5 = CustomUser.objects.filter(id = '%s'% obj4).values('name')
-    
+        name = request.POST.get('user_name')
+        text = request.POST.get('text')
+        designation = request.POST.get('designation')
+        user = Userprofiles.objects.create(name=name, department=text, designation=designation, user_id = request.user.id)
+        return redirect('login')
+    return render(request, 'profile.html',{'pk':users.id, 'users': users})
+
+def getusers(request):
+    text = request.POST.get('text')
+    users = request.user
+    data = ""
+    obj1 = Userprofiles.objects.filter(department = '%s'% text, designation = 'manager').values()
+    print(obj1)
+    obj2 = Userprofiles.objects.filter(user_id = '%s'% users.id, department = '%s'% text, designation = 'manager').values()
+    print(obj2)
+    obj3 = Userprofiles.objects.filter(department = '%s'% text, designation = 'manager').values()
+    if obj3:
+        obj4 = list(obj3)[0]['user_id']
+        obj5 = CustomUser.objects.filter(id = '%s'% obj4).values('email')
         data = {
             'pos1': list(obj1),
             'pos2': list(obj2),
-            'pos3': obj5[0]['name'],
+            'pos3': obj5[0]['email'],
         }
-        return JsonResponse(data)
-    
-    return render(request, 'profile.html')
+    return JsonResponse(data, safe=False)

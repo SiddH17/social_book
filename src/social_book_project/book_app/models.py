@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from .managers import CustomUserManager
@@ -22,9 +23,12 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
     
-class Profiles(CustomUser):
-    name = models.CharField(max_length=100)
-    department = models.CharField()
-    designation = models.CharField()
+class Userprofiles(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+    name = models.CharField(max_length=100, null=True)
+    department = models.CharField(null=True)
+    designation = models.CharField(null=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
-    
+    # def __str__(self):
+    #     return self.name

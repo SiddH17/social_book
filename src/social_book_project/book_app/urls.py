@@ -7,4 +7,7 @@ urlpatterns = [
     path('logout/', views.logoutuser, name='logout'),
     path('profile/<int:pk>/', views.userprofile, name='profile'),
     path('', views.home, name="home"),
+
+    # API
+    path('api/users/', views.getusers, name='getusers_api'),
 ]

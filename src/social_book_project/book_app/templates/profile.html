@@ -14,17 +14,17 @@
         <form action="" method="post">
             {% csrf_token %}
             <!-- Accepting Name from user -->
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name">
+            <label for="user_name">Name</label>
+            <input type="text" id="user_name" name="user_name">
             <br><br>
 
             <!-- User needs to select department -->
-            <span>Select Department:</span>
-            <select name="department" id="department">
-                <option value="CSE" id="CSE">CS Engineering</option>
-                <option value="Phy" id="Phy">Physics</option>
-                <option value="Chem" id="Chem">Chemistry</option>
-                <option value="Math" id="Math">Mathematics</option>
+            <span>Department:</span>
+            <select name="text" id="department" onchange="Department()" data-pk="{{pk}}">
+                <option value="CS Engineering" id="CSE">CS Engineering</option>
+                <option value="Physics" id="Phy">Physics</option>
+                <option value="Chemistry" id="Chem">Chemistry</option>
+                <option value="Mathematics" id="Math">Mathematics</option>
             </select>
             <br><br>
 
@@ -33,14 +33,59 @@
             <select name="designation" id="designation">
             </select>
             <br><br>
+            <p id="yourmanager"></p>
+            <br>    
+            <button type="submit">Submit</button>
         </form>
         <!-- Manager assigned if employee -->
-        <div>
-            <p id="yourmanager">Your Manager: </p>
-            <br>    
-        </div>
-        <button type="submit">Submit</button>
     </div>
-    <script src="{% static 'profile.js'%}"></script>
+    <script>
+        function Department()   {
+            let dept = document.getElementById("department");
+            let text = dept.options[dept.selectedIndex].text;
+            let pk = department.getAttribute('data-pk');
+            let csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            $.ajax({
+                type: 'POST',
+                url: '/api/users/',
+                data: {
+                    'text': text,
+                    'csrfmiddlewaretoken': csrftoken
+                },
+                success: function (response){
+                    len1 = 0 
+                    len2 = 0
+                    var val1 = response.pos1;  
+                    if (val1) 
+                        var len1 = val1.length;
+                    var val2 = response.pos2;
+                    if (val2)
+                        var len2 = val2.length;
+                    var designation = document.getElementById("designation");
+                    var manager = document.getElementById("yourmanager");
+                    var pos = '';
+                    if (len1>0)   {
+                        if(len2>0)  {
+                            pos += '<option value="Manager" selected>Manager</option>';
+                            pos += '<option value="employee">Employee</option>';
+                            designation.innerHTML = pos;
+                        }
+                        else    {
+                            pos += '<option value="employee">Employee</option>';
+                            designation.innerHTML = pos;
+                            manager.val = response.pos3;
+                            manager.innerHTML = 'Your manager: '+response.pos3;
+                        }
+                    }
+                    else    {
+                        pos += '<option value="manager">Manager</option>';
+                        pos += '<option value="employee">Employee</option>';
+                        designation.innerHTML = pos;
+                        manager.val = response.pos3;
+                    }
+                },
+            }); 
+        } 
+    </script>
 </body>
 </html>
