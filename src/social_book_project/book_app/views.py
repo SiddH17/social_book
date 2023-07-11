@@ -71,6 +71,7 @@ def userprofile(request,pk):
         designation = request.POST.get('designation')
         user = Userprofiles.objects.create(name=name, department=text, designation=designation, user_id = request.user.id)
         return redirect('login')
+
     return render(request, 'profile.html',{'pk':users.id, 'users': users})
 
 def getusers(request):

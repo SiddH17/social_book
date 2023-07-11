@@ -33,11 +33,11 @@
             <select name="designation" id="designation">
             </select>
             <br><br>
+            <!-- Manager assigned if employee -->
             <p id="yourmanager"></p>
             <br>    
             <button type="submit">Submit</button>
         </form>
-        <!-- Manager assigned if employee -->
     </div>
     <script>
         function Department()   {
@@ -81,7 +81,7 @@
                         pos += '<option value="manager">Manager</option>';
                         pos += '<option value="employee">Employee</option>';
                         designation.innerHTML = pos;
-                        manager.val = response.pos3;
+                        manager.innerHTML = 'Your manager: '+response.pos3;
                     }
                 },
             }); 
