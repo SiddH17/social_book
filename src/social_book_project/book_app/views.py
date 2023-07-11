@@ -70,11 +70,18 @@ def userprofile(request,pk):
         text = request.POST.get('text')
         designation = request.POST.get('designation')
         user = Userprofiles.objects.create(name=name, department=text, designation=designation, user_id = request.user.id)
-        return redirect('login')
+     
+        # if Userprofiles.objects.filter(user_id=users.id).exists():
+        #     # messages.info(request, "You've already submitted this form!")
+        #     return redirect('profile',pk=users.id)
+        # else:
+        #     return redirect('login')
 
+        return redirect('login')
     return render(request, 'profile.html',{'pk':users.id, 'users': users})
 
-def getusers(request):
+def getusers(request):  
+
     text = request.POST.get('text')
     users = request.user
     data = ""
@@ -92,3 +99,4 @@ def getusers(request):
             'pos3': obj5[0]['email'],
         }
     return JsonResponse(data, safe=False)
+
