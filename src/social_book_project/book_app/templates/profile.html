@@ -2,6 +2,12 @@
 {% load static %}
 <html lang="en">
 <head>
+    <style>
+        a   {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,8 +42,12 @@
             <!-- Manager assigned if employee -->
             <p id="yourmanager"></p>
             <br>    
-            <button type="submit">Submit</button>
+            <button type="submit" name="button" value="loginbtn">Submit</button>
+            <br><br>
         </form>
+        <div>
+            <button><a href="{% url 'dashboard'%}">Go to Dashboard</a></button>
+        </div>
     </div>
     <script>
         function Department()   {

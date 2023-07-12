@@ -52,7 +52,10 @@ def loginuser(request):
         user = authenticate(email=email, password=password)
         if user is not None:
             login(request, user)
-            return redirect('profile',pk=user.id)
+            if request.POST.get('button') == 'profilebtn':
+                return redirect('profile',pk=user.id)
+            elif request.POST.get('button') == 'dashbtn':
+                return redirect('dashboard')
         else:
             messages.info(request, "Please enter valid credentials!")
             return redirect('login')
@@ -100,3 +103,13 @@ def getusers(request):
         }
     return JsonResponse(data, safe=False)
 
+def getuserdash(request):
+    prof = Userprofiles.objects.all()
+    if prof:    
+        data = list(prof.values())
+        return JsonResponse({'data': data}, safe=False)
+    else:
+        return JsonResponse({'data':[]}, safe=False)
+    
+def userdash(request):
+    return render(request, 'dashboard.html')

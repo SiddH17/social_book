@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        td  {
+            padding: 15px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <div>
+        {% csrf_token %}
+        <!-- Display regisered users using tabular format -->
+        <h2>All registered users:</h2>
+        <table id="dispusers"></table>
+    </div>
+    <!-- Use JS and ajax to perform calls -->
+    <script>
+        $.ajax({
+            type: 'GET',
+            url: '/api/dash/',
+            dataType: 'json',
+            success: function(response){
+                var darray = response.data;
+                var dispuser = $('#dispusers');
+                if(Array.isArray(darray))   {
+                    darray.forEach(function(user) {
+                        var row = $('<tr>');
+                        var user_userid = $('<td>').text(user.user_id);
+                        var user_name = $('<td>').text(user.name);
+                        var user_dept = $('<td>').text(user.department);
+                        var user_desig = $('<td>').text(user.designation);
+                        row.append(user_userid, user_name, user_dept, user_desig);
+                        dispuser.append(row);
+                    });
+                }
+                else    {
+                    console.log("error")
+                }
+            },
+        });
+    </script>
+</body>
+</html>
